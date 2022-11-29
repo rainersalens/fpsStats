@@ -13,3 +13,7 @@ body {
     background-attachment: fixed;
     background-image: linear-gradient(to bottom, gray, white)
 }
+
+* {
+    font-family: Arial;
+}
