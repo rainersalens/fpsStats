@@ -17,6 +17,7 @@ const response = await fetch(url, { headers: { "Authorization": "d598c2c0-0ef7-4
 
 if (response.status != 200) {
   document.getElementById("responseStatus").textContent = "Request error " + response.status;
+  document.getElementById("resultDiv").style.opacity = 100;
   return;
 }
 
@@ -24,7 +25,15 @@ const data = (await response.json()).data;
 
 console.log(data);
 
-document.getElementById("responseStatus").textContent = "Account name: " + data.account.name + "Test";
+document.getElementById("responseStatus").innerHTML = 
+  "Account name: " + data.account.name + "<br>" 
+  + "Account ID: " + data.account.id + "<br>"
+  + "<br>"
+  + "Solo k/d: " + data.stats.all.solo.kd + "<br>"
+  + "Duos k/d: " + data.stats.all.duo.kd + "<br>"
+  + "Squads k/d: " + data.stats.all.squad.kd + "<br>";
+
+
 document.getElementById("resultDiv").style.opacity = 100;
 }
 
