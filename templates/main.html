@@ -24,12 +24,15 @@
                 margin: auto;
                 top: 20px;
                 width: 50%;
+                background-color: white;
                 ">        
         <h1 style="margin-left: 20px; margin-top: 20px; margin-right: 20px">Hello! Input a Fortnite username</h1>
         <form action="/action_page.php">
             <label style="margin-left: 20px; margin-top: 20px;" for="fname">Username:</label>
             <input style="margin-left: 20px; resize:horizontal; width:50%" type="text" id="usern" name="usern"><br><br>
-            <button type="button" onclick=getInput() class="btn btn-dark" id="enterBtn" style="margin-left: 20px; margin-bottom: 20px; resize:horizontal; width:50%">Enter</button>
+            <h2 style="margin-left: 20px; resize:horizontal; width:50%">Pick the timeframe</h2>
+            <button type="button" class="btn btn-primary" style="margin-left: 20px; resize:horizontal; width:30%" onclick="timeFrame = 0">Current season</button> <button type="button" class="btn btn-primary" style="margin-right: 20px; margin-left: 20px; resize:horizontal; width: 30%;" onclick="timeFrame = 1">Lifetime</button> <br>
+            <button type="button" onclick=getInput() class="btn btn-dark" id="enterBtn" style="margin-left: 20px; margin-bottom: 20px; margin-top: 20px; resize:horizontal; width:50%">Enter</button>
 
 
 
@@ -43,7 +46,8 @@
                 margin: auto;
                 top: 20px;
                 width: 50%;
-                margin-top: 40px"
+                margin-top: 40px;
+                background-color: white;"
         id = resultDiv>
         <h style="margin-bottom: 40px;" id="responseStatus"></h>
     </div>
