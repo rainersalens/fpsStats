@@ -1,83 +1,50 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>fpsStats</title>
-</head>
-<body>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-<div class="b-example-divider"></div>
-
-<header class="p-3 text-bg-dark">
-  <div class="container">
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-      <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-        <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap"><use xlink:href="#bootstrap"/></svg>
-      </a>
-
-      <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-        <li><a href="/homepage.html" class="nav-link px-2 text-secondary">Home/About</a></li>
-        <li><a href="/main.html" class="nav-link px-2 text-white">Stat tracker</a></li>
-      </ul>
-
-      <div class="text-end">
-        <a href="/login.html">
-        <button type="button" class="btn btn-outline-light me-2">Login</button>
-        </a>
-        <a href="/register.html">
-        <button type="button" href="/register.html" class="btn btn-warning">Sign-up</button>
-        </a>
-      </div>
-    </div>
-  </div>
-</header>
-
-<div class="container">
+<html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
-    <title>FPS Stats</title>
-    <link rel= "stylesheet" type= "text/css" href="style.css">
-    <script src="script.js"></script>
+  <title></title>
+  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+    crossorigin="anonymous">
+    </script>
+  <script>
+    $(function () {
+      $("#header").load("header.html");
+    });
+  </script>
 </head>
 
 <body>
-    <div style="border-style: solid; 
+  <div id="header"></div>
+  <div class="container" style="border-style: solid; 
                 border-radius: 40px;
                 position: relative;
                 margin: auto;
                 top: 20px;
                 width: 50%;
                 background-color: white;
-                ">        
-        <h1 style="margin-left: 20px; margin-top: 20px; margin-right: 20px">Hello! Input a Fortnite username</h1>
-        <form action="/action_page.php">
-            <label style="margin-left: 20px; margin-top: 20px;" for="fname">Username:</label>
-            <input style="margin-left: 20px; resize:horizontal; width:50%" type="text" id="usern" name="usern"><br><br>
-            <h2 style="margin-left: 20px; resize:horizontal; width:50%">Pick the timeframe</h2>
-            <button type="button" class="btn btn-primary" style="margin-left: 20px; resize:horizontal; width:30%" onclick="timeFrame = 0">Current season</button> <button type="button" class="btn btn-primary" style="margin-right: 20px; margin-left: 20px; resize:horizontal; width: 30%;" onclick="timeFrame = 1">Lifetime</button> <br>
-            <button type="button" onclick=getInput() class="btn btn-dark" id="enterBtn" style="margin-left: 20px; margin-bottom: 20px; margin-top: 60px; resize:horizontal; width:50%">Enter</button>
-        </form>
+                ">
+    <h2 style="margin-left: 20px; margin-top: 20px; margin-right: 20px">Hello! Please choose the parameters to
+      generate stats</h2>
+    <div class="container">
+      <form name="submitReqForm" method="post" action="php/statsGeneration.php">
+        <div class="form-group">
+          <label for="chooseGame">Choose game</label>
+          <div>
+            <select id="chooseGame" name="chooseGame" class="custom-select">
+              <option value="fortnite">Fortnite</option>
+              <option value="apex">Apex Legends</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="userName">Username</label>
+          <input id="userName" name="userName" type="text" class="form-control">
+        </div>
+        <div class="form-group">
+          <button name="submit" type="submit" class="btn btn-primary" style="margin: 10px;">Submit</button>
+        </div>
+      </form>
     </div>
-    <div style="
-                border-style: solid; 
-                border-radius: 10px;
-                position: relative;
-                margin: auto;
-                top: 20px;
-                width: 50%;
-                margin-top: 40px;
-                background-color: white;"
-        id = resultDiv>
-        <h style="margin-bottom: 40px;" id="responseStatus"></h>
-    </div>
+  </div>
 </body>
-
+<script src="/statstask/scripts/cookieCheck.js"></script>
 </html>
