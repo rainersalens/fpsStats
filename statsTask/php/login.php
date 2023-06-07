@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Stats</title>
+	<title>Login</title>
 </head>
 
 <body>
@@ -38,79 +38,46 @@
 					<a href="php/logout.php" id="logoutButton">
 						<button type="button" class="btn btn-outline-light me-2">Log out</button>
 					</a>
+					<a href="edit.html" id="editButton">
+            		<button type="button" class="btn btn-outline-light me-2">Edit</button>
+          			</a>
 				</div>
 			</div>
 		</div>
 	</header>
 
-	<?php
-	require "functions.php";
-	$game = $_POST['chooseGame'];
-	$username = $_POST['userName'];
-
-	if ($game == 'apex') {
-		$endPoint = 'https://api.mozambiquehe.re/bridge';
-		$authHeader = getenv('APEX_LEGENDS_API_KEY');
-		$headers =
-			[
-				"Authorization: $authHeader",
-			];
-		$data = array(
-			'player' => $username,
-			'platform' => 'PC',
-		);
-	} elseif ($game == 'fortnite') {
-		$endPoint = 'https://fortnite-api.com/v2/stats/br/v2';
-		$authHeader = getenv('FORTNITE_API_KEY');
-		$headers =
-			[
-				"Authorization: $authHeader",
-			];
-		$data = array(
-			'name' => $username,
-			'accountType' => 'epic',
-		);
-	}
-
-	echo "<h2 class=\"text-center\">Stats for player $username in game - $game</h2>";
-	?>
-
 	<div class="container">
-		<table class="table" id="tbstyle">
-			<tbody>
-				<tr>
-					<th>Area</th>
-					<th>Kills</th>
-				</tr>
 
-				<?php
-				$json = callApi('GET', $endPoint, $headers, $data);
-				$all = json_decode($json, true)['legends']['all'];
-				foreach ($all as $area => $areaName) {
-					if (isset($areaName['data'])) {
-						foreach ($areaName['data'] as $properties => $propertyValue) {
-							if ($propertyValue['key'] == 'kills') {
-								?>
-								<tr>
-									<td>
-										<?= $area ?>
-									</td>
-									<td>
-										<?= $propertyValue['value'] ?>
-									</td>
-								</tr>
-								<?php
-							}
-						}
-					}
-				}
-				?>
-			</tbody>
-		</table>
+		<?php
+		$con = mysqli_connect('localhost', getenv('DB_USER_NAME'), getenv('DB_USER_PASS'), 'userdata');
+
+		$username = $_POST['usernlog'];
+		$password = $_POST['passlog'];
+
+		$sql = "SELECT * FROM `credentials` WHERE username = '$username' AND password = '$password'";
+
+		$result = mysqli_query($con, $sql);
+
+		$num_rows = mysqli_num_rows($result);
+		try {
+			$result = mysqli_query($con, $sql);
+			if ($num_rows == 1) {
+				$cookie_name = "userName";
+				$cookie_value = $username;
+				setcookie($cookie_name, $cookie_value, time() + (86400), "/"); // 24h validity
+				echo '<h2 class="text-center">User logged in</h2>';
+				echo '<div class="text-center"> <a class="btn btn-primary" href="/statstask/main.html" role="button">Back to main page</a> </div>';
+			} elseif ($num_rows == 0) {
+				echo '<h2 class="text-center">Wrong credentials</h2>';
+			} else {
+				echo '<h2 class="text-center">An error occured.</h2>';
+			}
+		} catch (exception $e) {
+			echo '<h2 class="text-center">An error occured.</h2>';
+		}
+		?>
+
 	</div>
-
-
-	
 </body>
 <script src="/statstask/scripts/headerCheck.js" type="text/javascript"></script>
 
