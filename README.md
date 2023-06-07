@@ -11,7 +11,7 @@ Make sure project files are in ...\xampp\htdocs\statsTask
 
 Import databases from database_files
 
-Open http://localhost/statsTask in web browser
+Open http://localhost/statsTask in web browser to make sure it works
 
 
 # fpsStats
