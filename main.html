@@ -1,20 +1,55 @@
-<html>
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
-  <title></title>
-  <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-    crossorigin="anonymous">
-    </script>
-  <script>
-    $(function () {
-      $("#header").load("header.html");
-    });
-  </script>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>fpsStats</title>
+  <script src="scripts/cookieCheck.js" type="text/javascript"></script>
 </head>
 
 <body>
-  <div id="header"></div>
-  <div class="container" style="border-style: solid; 
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+  <div class="b-example-divider"></div>
+
+  <header class="p-3 text-bg-dark">
+    <div class="container">
+      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+            <use xlink:href="#bootstrap" />
+          </svg>
+        </a>
+
+        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+          <li><a href="/statstask/index.html" class="nav-link px-2 text-secondary">Home/About</a></li>
+          <li><a href="/statstask/main.html" class="nav-link px-2 text-white">Stat tracker</a></li>
+        </ul>
+
+        <div class="text-end">
+          <a href="/statstask/login.html" id="loginButton">
+            <button type="button" class="btn btn-outline-light me-2">Login</button>
+          </a>
+          <a href="/statstask/register.html" id="registerButton">
+            <button type="button" class="btn btn-warning">Sign-up</button>
+          </a>
+          <a href="php/logout.php" id="logoutButton">
+            <button type="button" class="btn btn-outline-light me-2">Log out</button>
+          </a>
+          <a href="edit.html" id="editButton">
+            <button type="button" class="btn btn-outline-light me-2">Edit</button>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+
+    <body>
+      <div style="border-style: solid; 
                 border-radius: 40px;
                 position: relative;
                 margin: auto;
@@ -22,29 +57,66 @@
                 width: 50%;
                 background-color: white;
                 ">
-    <h2 style="margin-left: 20px; margin-top: 20px; margin-right: 20px">Hello! Please choose the parameters to
-      generate stats</h2>
-    <div class="container">
-      <form name="submitReqForm" method="post" action="php/statsGeneration.php">
-        <div class="form-group">
-          <label for="chooseGame">Choose game</label>
-          <div>
-            <select id="chooseGame" name="chooseGame" class="custom-select">
-              <option value="fortnite">Fortnite</option>
-              <option value="apex">Apex Legends</option>
-            </select>
-          </div>
+        <h2 style="margin-left: 20px; margin-top: 20px; margin-right: 20px">Hello! Please choose the parameters to generate stats</h2>
+        <div class="container">
+          <form name="submitReqForm" method="post" action="php/statsGeneration.php">
+            <div class="form-group">
+              <label for="chooseGame">Choose game</label>
+              <div>
+                <select id="chooseGame" name="chooseGame" class="custom-select">
+                  <option value="fortnite">Fortnite</option>
+                  <option value="apex">Apex Legends</option>
+                </select>
+              </div>
+            </div>
+            <div id="fortniteParams" class="form-group" style="display: none;">
+              <label for="userName">Fortnite Username</label>
+              <input id="userName" name="userName" type="text" class="form-control">
+              <label for="timeframe">Choose timeframe</label>
+              <div>
+                <select id="timeframe" name="timeframe" class="custom-select">
+                  <option value="current">Current session</option>
+                  <option value="lifetime">Lifetime</option>
+                </select>
+              </div>
+            </div>
+            <div id="apexParams" class="form-group" style="display: none;">
+              <label for="userName">Apex Username</label>
+              <input id="userName" name="userName" type="text" class="form-control">
+              <label for="platform">Choose platform</label>
+              <div>
+                <select id="platform" name="platform" class="custom-select">
+                  <option value="pc">PC</option>
+                  <option value="ps4">PS4</option>
+                  <option value="x1">X1</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-group">
+              <button name="submit" type="submit" class="btn btn-primary" style="margin: 10px;">Submit</button>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="userName">Username</label>
-          <input id="userName" name="userName" type="text" class="form-control">
-        </div>
-        <div class="form-group">
-          <button name="submit" type="submit" class="btn btn-primary" style="margin: 10px;">Submit</button>
-        </div>
-      </form>
-    </div>
-  </div>
-</body>
-<script src="/statstask/scripts/cookieCheck.js"></script>
+      </div>
+    </body>
+    <script src="scripts/headerCheck.js" type="text/javascript"></script>
+    <script>
+      document.getElementById('chooseGame').addEventListener('change', function() {
+        var chooseGame = this.value;
+        var fortniteParams = document.getElementById('fortniteParams');
+        var apexParams = document.getElementById('apexParams');
+
+        // Hide both parameter sections
+        fortniteParams.style.display = 'none';
+        apexParams.style.display = 'none';
+
+        // Show the relevant parameter section based on the selected game
+        if (chooseGame === 'fortnite') {
+          fortniteParams.style.display = 'block';
+        } else if (chooseGame === 'apex') {
+          apexParams.style.display = 'block';
+        }
+      });
+    </script>
+
 </html>

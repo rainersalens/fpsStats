@@ -1,16 +1,19 @@
 const loginButton = document.getElementById("loginButton");
 const registerButton = document.getElementById("registerButton");
 const logoutButton = document.getElementById("logoutButton");
+const editButton = document.getElementById("editButton");
 const loginCookie = getCookie('userName');
 
 if (loginCookie.length > 0) {
   loginButton.style.display = "none";
   registerButton.style.display = "none";
   logoutButton.style.display = "initial";
+  editButton.style.display = "initial";
 } else if (loginCookie == 0) {
   loginButton.style.display = "initial";
   registerButton.style.display = "initial";
   logoutButton.style.display = "none";
+  editButton.style.display = "none";
 }
 
 function getCookie(cname) {
