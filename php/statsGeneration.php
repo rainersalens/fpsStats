@@ -43,6 +43,12 @@ if (isset($response['Error'])) {
     $banIsActive = isset($response['global']['bans']['isActive']) ? $response['global']['bans']['isActive'] : false;
     $banRemainingSeconds = isset($response['global']['bans']['remainingSeconds']) ? $response['global']['bans']['remainingSeconds'] : 0;
     $lastBanReason = isset($response['global']['bans']['last_banReason']) ? getBanReasonText($response['global']['bans']['last_banReason']) : '';
+
+    // Player rank information
+    $rankScore = isset($response['global']['rank']['rankScore']) ? $response['global']['rank']['rankScore'] : '';
+    $rankName = isset($response['global']['rank']['rankName']) ? $response['global']['rank']['rankName'] : '';
+    $rankDiv = isset($response['global']['rank']['rankDiv']) ? $response['global']['rank']['rankDiv'] : '';
+    $rankImg = isset($response['global']['rank']['rankImg']) ? $response['global']['rank']['rankImg'] : '';
 } else {
     // Handle error when the API response is invalid or missing necessary data
     $errorMessage = "No data found for player on the platform.";
@@ -132,10 +138,20 @@ function getBanReasonText($banReason)
                 </div>
             </div>
 
+            <!-- Add player rank information -->
+            <div class="player-rank">
+                <hr>
+                <p>Ranked Points (RP): <?= $rankScore ?></p>
+                <p>Rank: <?= $rankName ?></p>
+                <p>Rank Division: <?= $rankDiv ?></p>
+                <img src="<?= $rankImg ?>" alt="Rank Image" style="max-width: 250px; max-height: 250px;">
+                <hr>
+            </div>
+
             <table class="table" id="tbstyle">
                 <tbody>
                     <tr>
-                        <th>Area</th>
+                        <th>Legend</th>
                         <th>Kills</th>
                     </tr>
 
