@@ -38,7 +38,7 @@
 					<a href="php/logout.php" id="logoutButton">
 						<button type="button" class="btn btn-outline-light me-2">Log out</button>
 					</a>
-					<a href="edit.html" id="editButton">
+					<a href="/statstask/edit.html" id="editButton">
             		<button type="button" class="btn btn-outline-light me-2">Edit</button>
           			</a>
 				</div>
@@ -65,7 +65,7 @@
 				$cookie_name = "userName";
 				$cookie_value = $username;
 				setcookie($cookie_name, $cookie_value, time() + (86400), "/"); // 24h validity
-				echo '<h2 class="text-center">User logged in</h2>';
+				echo '<h2 class="text-center">Succesfully logged in</h2>';
 				echo '<div class="text-center"> <a class="btn btn-primary" href="/statstask/main.html" role="button">Back to main page</a> </div>';
 			} elseif ($num_rows == 0) {
 				echo '<h2 class="text-center">Wrong credentials</h2>';

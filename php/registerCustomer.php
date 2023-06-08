@@ -46,17 +46,38 @@
 		$email = $_POST['emailreg'];
 		$password = $_POST['passreg'];
 
-		$sql = "INSERT INTO `credentials` (`username`, `email`, `password`) VALUES ('$username', '$email', '$password')";
-
-		try {
-			$result = mysqli_query($con, $sql);
-			if ($result) {
-				echo '<h2 class="text-center">Customer registered</h2>';
+		// Check if the username already exists
+		$usernameQuery = "SELECT * FROM `credentials` WHERE `username` = '$username'";
+		$usernameResult = mysqli_query($con, $usernameQuery);
+		if (mysqli_num_rows($usernameResult) > 0) {
+			echo '<h2 class="text-center">Username already exists. Please choose a different one.</h2>';
+		} else {
+			// Check if the email already exists
+			$emailQuery = "SELECT * FROM `credentials` WHERE `email` = '$email'";
+			$emailResult = mysqli_query($con, $emailQuery);
+			if (mysqli_num_rows($emailResult) > 0) {
+				echo '<h2 class="text-center">Email already exists. Please choose a different one.</h2>';
+			} else {
+				// Insert the new user data into the database
+				$sql = "INSERT INTO `credentials` (`username`, `email`, `password`) VALUES ('$username', '$email', '$password')";
+				$insertResult = mysqli_query($con, $sql);
+				if ($insertResult) {
+					echo '<h2 class="text-center">Customer registered</h2>';
+					echo '<div class="text-center">
+							<a href="/statstask/login.html">
+								<button type="button" class="btn btn-primary">Go to main page</button>
+							</a>
+						</div>';
+				} else {
+					echo '<h2 class="text-center">An error occurred. Please try again later.</h2>';
+					echo '<div class="text-center">
+							<a href="/statstask/register.html">
+								<button type="button" class="btn btn-primary">Go back</button>
+							</a>
+						</div>';
+				}
 			}
-		} catch (exception $e) {
-			echo '<h2 class="text-center">An error occured. Please check the input data.</h2>';
 		}
-
 		?>
 	</div>
 </body>

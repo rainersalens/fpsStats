@@ -104,7 +104,7 @@ function getBanReasonText($banReason)
                     <a href="php/logout.php" id="logoutButton">
                         <button type="button" class="btn btn-outline-light me-2">Log out</button>
                     </a>
-                    <a href="edit.html" id="editButton">
+                    <a href="/statstask/edit.html" id="editButton">
                         <button type="button" class="btn btn-outline-light me-2">Edit</button>
                     </a>
                 </div>
@@ -128,7 +128,7 @@ function getBanReasonText($banReason)
                     <p>Platform: <?= $platform ?></p>
                     <p>
                         Level: <?= $level ?>
-                        (<?= $toNextLevelPercent ?>% to next level)
+                        (<?= $toNextLevelPercent ?>% progress to next level)
                     </p>
                     <p>Last Ban Reason: <?= $lastBanReason ?></p>
                     <p>Ban info: <?= $banIsActive ? 'Active' : 'Not active' ?></p>
@@ -144,7 +144,7 @@ function getBanReasonText($banReason)
                 <p>Ranked Points (RP): <?= $rankScore ?></p>
                 <p>Rank: <?= $rankName ?></p>
                 <p>Rank Division: <?= $rankDiv ?></p>
-                <img src="<?= $rankImg ?>" alt="Rank Image" style="max-width: 250px; max-height: 250px;">
+                <img src="<?= $rankImg ?>" alt="Rank Image" style="width: 150px; height: 150px;">
                 <hr>
             </div>
 
