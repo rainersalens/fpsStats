@@ -71,18 +71,18 @@
             </div>
             <div id="fortniteParams" class="form-group">
               <label for="fortniteUserName">Fortnite Username</label>
-              <input id="fortniteUserName" name="userName" type="text" class="form-control">
+              <input id="fortniteUserName" name="fortniteUserName" type="text" class="form-control">
               <label for="fortniteTimeframe">Choose timeframe</label>
               <div>
-                <select id="fortniteTimeframe" name="timeframe" class="custom-select">
-                  <option value="current">Current session</option>
+                <select id="fortniteTimeframe" name="fortniteTimeframe" class="custom-select">
+                  <option value="season">Current season</option>
                   <option value="lifetime">Lifetime</option>
                 </select>
               </div>
             </div>
             <div id="apexParams" class="form-group" style="display: none;">
               <label for="apexUserName">Apex Username</label>
-              <input id="apexUserName" name="userName" type="text" class="form-control">
+              <input id="apexUserName" name="apexUserName" type="text" class="form-control">
               <label for="apexPlatform">Choose platform</label>
               <div>
                 <select id="apexPlatform" name="platform" class="custom-select">
@@ -93,7 +93,7 @@
               </div>
             </div>
             <div class="form-group">
-              <button name="submit" type="submit" class="btn btn-primary" style="margin: 10px;">Submit</button>
+              <button name="submit" type="submit" class="btn btn-primary" style="margin: 10px;"></button>
             </div>
           </form>
         </div>
@@ -138,8 +138,12 @@
 
         if (chosenGame === 'fortnite') {
           fortniteParams.style.display = 'block';
+          document.submitReqForm.action = "php/Fortnite.php";
+          document.querySelector('button[type="submit"]').innerHTML = "Generate Fortnite Stats";
         } else if (chosenGame === 'apex') {
           apexParams.style.display = 'block';
+          document.submitReqForm.action = "php/Apex.php";
+          document.querySelector('button[type="submit"]').innerHTML = "Generate Apex Legends Stats";
         }
       }
 
