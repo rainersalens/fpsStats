@@ -22,14 +22,15 @@ if ($game == 'fortnite') {
 $json = callApi('GET', $endPoint, $headers, $data);
 $response = json_decode($json, true);
 
-// Check if the API response is valid and does not contain an error
-if (isset($response['Error'])) {
-    $errorMessage = "No player found on the platform.";
-} elseif (isset($response['data']['image'])) {
-    $image = $response['data']['image'];
+// Check if the API response contains an error
+if (isset($response['error']) && $response['error'] === "the requested account does not exist") {
+    $errorMessage = "No stats for user found.";
+} elseif (isset($response['status']) && $response['status'] === 404) {
+    $errorMessage = "No stats for user found.";
+} elseif (!isset($response['data']['image'])) {
+    $errorMessage = "No stats for user found.";
 } else {
-    // Handle error when the API response is invalid or missing necessary data
-    $errorMessage = "No data found for player on the platform.";
+    $image = $response['data']['image'];
 }
 ?>
 
@@ -41,6 +42,11 @@ if (isset($response['Error'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stats</title>
+    <style>
+        .button-container {
+            margin-top: 10px;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,10 +88,15 @@ if (isset($response['Error'])) {
     </header>
 
     <div class="container">
-        <?php if (isset($image)): ?>
-            <img src="<?php echo $image; ?>" alt="Player Image">
-        <?php else: ?>
+        <?php if (isset($errorMessage)): ?>
             <p><?php echo $errorMessage; ?></p>
+        <?php else: ?>
+            <img src="<?php echo $image; ?>" alt="Player Image">
+            <div class="button-container">
+                <a href="<?php echo $image; ?>" download>
+                    <button type="button" class="btn btn-primary">Original image</button>
+                </a>
+            </div>
         <?php endif; ?>
     </div>
 
