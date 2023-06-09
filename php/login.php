@@ -48,36 +48,43 @@
 
 	<div class="container">
 
-		<?php
-		$con = mysqli_connect('localhost', getenv('DB_USER_NAME'), getenv('DB_USER_PASS'), 'userdata');
+	<?php
+$con = mysqli_connect('localhost', getenv('DB_USER_NAME'), getenv('DB_USER_PASS'), 'userdata');
 
-		$username = $_POST['usernlog'];
-		$password = $_POST['passlog'];
+$username = $_POST['usernlog'];
+$password = $_POST['passlog'];
 
-		$sql = "SELECT * FROM `credentials` WHERE username = '$username' AND password = '$password'";
+$sql = "SELECT * FROM `credentials` WHERE username = '$username' AND password = '$password'";
 
-		$result = mysqli_query($con, $sql);
+$result = mysqli_query($con, $sql);
 
-		$num_rows = mysqli_num_rows($result);
-		try {
-			$result = mysqli_query($con, $sql);
-			if ($num_rows == 1) {
-				$cookie_name = "userName";
-				$cookie_value = $username;
-				setcookie($cookie_name, $cookie_value, time() + (86400), "/"); // 24h validity
-				echo '<h2 class="text-center">Succesfully logged in</h2>';
-				echo '<div class="text-center"> <a class="btn btn-primary" href="/statstask/main.html" role="button">Back to main page</a> </div>';
-			} elseif ($num_rows == 0) {
-				echo '<h2 class="text-center">Wrong credentials</h2>';
-			} else {
-				echo '<h2 class="text-center">An error occured.</h2>';
-			}
-		} catch (exception $e) {
-			echo '<h2 class="text-center">An error occured.</h2>';
-		}
-		?>
+$num_rows = mysqli_num_rows($result);
+try {
+    $result = mysqli_query($con, $sql);
+    if ($num_rows == 1) {
+        $row = mysqli_fetch_assoc($result);
+        $privilege = $row['privilege'];
 
-	</div>
+        $cookie_name = "userName";
+        $cookie_value = $username;
+        setcookie($cookie_name, $cookie_value, time() + (86400), "/"); // 24h validity
+
+        $cookie_name_privilege = "userPrivilege";
+        $cookie_value_privilege = $privilege;
+        setcookie($cookie_name_privilege, $cookie_value_privilege, time() + (86400), "/"); // 24h validity
+
+        echo '<h2 class="text-center">Successfully logged in</h2>';
+        echo '<div class="text-center"> <a class="btn btn-primary" href="/statstask/main.html" role="button">Back to main page</a> </div>';
+    } elseif ($num_rows == 0) {
+        echo '<h2 class="text-center">Wrong credentials</h2>';
+    } else {
+        echo '<h2 class="text-center">An error occurred.</h2>';
+    }
+} catch (exception $e) {
+    echo '<h2 class="text-center">An error occurred.</h2>';
+}
+?>
+</div>
 </body>
 <script src="/statstask/scripts/headerCheck.js" type="text/javascript"></script>
 
