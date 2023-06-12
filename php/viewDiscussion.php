@@ -84,10 +84,12 @@
                             $loggedInUserId = $_COOKIE['userId']; // Assuming the login token sets this cookie
                             $userPrivilege = $_COOKIE['userPrivilege'];
 
-                            if (($loggedInUserId && $userId == $loggedInUserId) || ($userPrivilege == 'admin'))  {
+                            if ($loggedInUserId && $userId == $loggedInUserId) {
                                 echo '<button id="editContentButton" class="btn btn-primary mt-3">Edit Content</button>';
-                                echo '<button id="deleteDiscussionButton" style="margin-left:20px" class="btn btn-warning mt-3">Delete Discussion</button>
-                                ';
+                            }
+                            
+                            if ($userPrivilege == 'admin') {
+                                echo '<button id="deleteDiscussionButton" style="margin-left:20px" class="btn btn-warning mt-3">Delete Discussion</button>';
                             }
                         } else {
                             echo '<h2 class="text-center mt-4">Discussion not found</h2>';
@@ -107,51 +109,51 @@
                         <div class="card-body">
                             <h3>Comments</h3>
                             <hr>
-                            <?php
-                            // Fetch comments for the discussion from the database
-                            $con = mysqli_connect('localhost', getenv('DB_USER_NAME'), getenv('DB_USER_PASS'), 'userdata');
-                            $discussionId = $_GET['id'];
-
-                            $commentsResult = mysqli_query($con, "SELECT * FROM comments WHERE discussion_id = $discussionId ORDER BY created_on DESC");
-                            $commentsCount = mysqli_num_rows($commentsResult);
-
-                            if ($commentsCount > 0) {
-                                while ($comment = mysqli_fetch_assoc($commentsResult)) {
-                                    $commentId = $comment['id']; // Get the comment ID
-                                    $commentUserId = $comment['user_id'];
-                                    $userResult = mysqli_query($con, "SELECT * FROM credentials WHERE id = $commentUserId");
-                                    $user = mysqli_fetch_assoc($userResult);
-
-                                    echo '<div class="mb-3">';
-                                    echo '<p class="fw-bold">' . ($user ? $user['username'] : 'Deleted User') . '</p>';
-                                    echo '<p>' . $comment['content'] . '</p>';
-
-                                    // Check if the comment belongs to the currently logged-in user
-                                    $loggedInUserId = $_COOKIE['userId']; // Assuming the login token sets this cookie
-                                    $userPrivilege = $_COOKIE['userPrivilege'];
-                                    
-                                    if (($loggedInUserId && $commentUserId == $loggedInUserId) || ($userPrivilege == 'admin')) {
-                                        echo '<div class="text-end">';
-                                        echo '<button class="btn btn-danger btn-sm delete-comment-btn" data-comment-id="' . $comment['id'] . '">Delete Comment</button>';
-                                        echo '</div>';
-                                    }                                    
-
-                                    echo '<hr>';
-
-                                    echo '</div>';
-                                }
-                            } else {
-                                echo '<p>No comments yet.</p>';
-                            }
-
-                            mysqli_close($con);
-                            ?>
-
-
-
                             <div class="mt-3">
                                 <input type="text" id="commentInput" class="form-control" placeholder="Write a comment">
                                 <button id="postCommentButton" class="btn btn-primary mt-2">Post comment</button>
+                            </div>
+                            <hr>
+                            <div class="mt-3" style="max-height: 300px; overflow: auto;">
+                                <?php
+                                // Fetch comments for the discussion from the database
+                                $con = mysqli_connect('localhost', getenv('DB_USER_NAME'), getenv('DB_USER_PASS'), 'userdata');
+                                $discussionId = $_GET['id'];
+
+                                $commentsResult = mysqli_query($con, "SELECT * FROM comments WHERE discussion_id = $discussionId ORDER BY created_on DESC");
+                                $commentsCount = mysqli_num_rows($commentsResult);
+
+                                if ($commentsCount > 0) {
+                                    while ($comment = mysqli_fetch_assoc($commentsResult)) {
+                                        $commentId = $comment['id']; // Get the comment ID
+                                        $commentUserId = $comment['user_id'];
+                                        $userResult = mysqli_query($con, "SELECT * FROM credentials WHERE id = $commentUserId");
+                                        $user = mysqli_fetch_assoc($userResult);
+
+                                        echo '<div class="mb-3">';
+                                        echo '<p class="fw-bold">' . ($user ? $user['username'] : 'Deleted User') . '</p>';
+                                        echo '<p>' . $comment['content'] . '</p>';
+
+                                        // Check if the comment belongs to the currently logged-in user
+                                        $loggedInUserId = $_COOKIE['userId']; // Assuming the login token sets this cookie
+                                        $userPrivilege = $_COOKIE['userPrivilege'];
+
+                                        if (($loggedInUserId && $commentUserId == $loggedInUserId) || ($userPrivilege == 'admin')) {
+                                            echo '<div class="text-end">';
+                                            echo '<button style="margin-right:20px" class="btn btn-danger btn-sm delete-comment-btn" data-comment-id="' . $comment['id'] . '">Delete Comment</button>';
+                                            echo '</div>';
+                                        }
+
+                                        echo '<hr>';
+
+                                        echo '</div>';
+                                    }
+                                } else {
+                                    echo '<p>No comments yet.</p>';
+                                }
+
+                                mysqli_close($con);
+                                ?>
                             </div>
                         </div>
                     </div>

@@ -51,7 +51,7 @@
                         <h5 class="card-title">Create a New Discussion</h5>
                         <form action="newDiscussion.php" method="POST">
                             <div class="mb-3">
-                                <label for="discussionName" class="form-label">Discussion Name</label>
+                                <label for="discussionName" class="form-label">Discussion Title</label>
                                 <input type="text" class="form-control" id="discussionName" name="discussionName" value="<?php echo isset($_GET['discussionName']) ? $_GET['discussionName'] : ''; ?>" required>
                             </div>
                             <div class="mb-3">
