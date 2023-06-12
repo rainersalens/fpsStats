@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Edit Users</title>
+  <title>Edit Discussion Types</title>
   <style>
     .content-container {
       margin-top: 80px;
@@ -50,13 +50,11 @@
   </header>
 
   <div class="content-container container">
-    <h1>Edit User Accounts</h1>
+    <h1>Edit Discussion Types</h1>
     <table class="table">
       <thead>
         <tr>
-          <th>Username</th>
-          <th>Email</th>
-          <th>Privilege Level</th>
+          <th>Name</th>
           <th>Actions</th>
         </tr>
       </thead>
@@ -79,37 +77,33 @@
 
         // Check if the user has admin privilege, otherwise redirect to another page
         if (!$isAdmin) {
-          header("Location: /statstask/index.html");
+          header("Location: /statstask/php/Forum.php");
           exit;
         }
 
-        // Handle user deletion
-        if (isset($_GET['deleteUserId'])) {
-          $userId = $_GET['deleteUserId'];
-          $query = "DELETE FROM credentials WHERE id = $userId";
+        // Handle discussion type deletion
+        if (isset($_GET['deleteTypeId'])) {
+          $typeId = $_GET['deleteTypeId'];
+          $query = "DELETE FROM discussion_types WHERE id = $typeId";
           if (mysqli_query($con, $query)) {
-            echo '<tr><td colspan="4">User deleted successfully.</td></tr>';
+            echo '<tr><td colspan="2">Discussion type deleted successfully.</td></tr>';
           } else {
-            echo '<tr><td colspan="4">Failed to delete user.</td></tr>';
+            echo '<tr><td colspan="2">Failed to delete discussion type.</td></tr>';
           }
         }
 
-        // Retrieve all users from the database
-        $query = "SELECT * FROM credentials";
+        // Retrieve all discussion types from the database
+        $query = "SELECT * FROM discussion_types";
         $result = mysqli_query($con, $query);
 
-        // Loop through the user records and display them in the table
+        // Loop through the discussion type records and display them in the table
         while ($row = mysqli_fetch_assoc($result)) {
-          $userId = $row['id'];
-          $username = $row['username'];
-          $email = $row['email'];
-          $privilege = $row['privilege'];
+          $typeId = $row['id'];
+          $typeName = $row['name'];
 
           echo "<tr>";
-          echo "<td>$username</td>";
-          echo "<td>$email</td>";
-          echo "<td>$privilege</td>";
-          echo "<td><button onclick=\"confirmDelete($userId, '$username')\">Delete</button></td>";
+          echo "<td>$typeName</td>";
+          echo "<td><button onclick=\"editType($typeId, '$typeName')\">Edit</button> <button onclick=\"confirmDelete($typeId, '$typeName')\">Delete</button></td>";
           echo "</tr>";
         }
 
@@ -122,10 +116,15 @@
 
   <script src="/statstask/scripts/headerCheck.js" type="text/javascript"></script>
   <script>
-    function confirmDelete(userId, username) {
-      if (confirm(`Are you sure you want to delete the user '${username}'?`)) {
-        // Redirect to the delete handler within the same page, passing the user ID
-        window.location.href = `editUsers.php?deleteUserId=${userId}`;
+    function editType(typeId, typeName) {
+      // Redirect to the edit page for the selected discussion type
+      window.location.href = `editDiscussionTypes.php?typeId=${typeId}&typeName=${encodeURIComponent(typeName)}`;
+    }
+
+    function confirmDelete(typeId, typeName) {
+      if (confirm(`Are you sure you want to delete the discussion type '${typeName}'?`)) {
+        // Redirect to the delete handler within the same page, passing the type ID
+        window.location.href = `editDiscussionTypes.php?deleteTypeId=${typeId}`;
       }
     }
   </script>
