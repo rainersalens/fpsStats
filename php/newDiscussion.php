@@ -84,7 +84,7 @@
                                 $discussionType = $_POST['discussionType'];
 
                                 // Get the user ID from the session or wherever it is stored
-                                $userId = 1; // Replace with the actual user ID
+                                $userId = $_COOKIE['userId'];
 
                                 $date = date('Y-m-d H:i:s');
                                 $pinned = 0; // Assuming initially the discussion is not pinned

@@ -81,7 +81,7 @@
                 setcookie($cookie_name_privilege, $cookie_value_privilege, time() + (86400), "/"); // 24h validity
 
                 echo '<h2 class="text-center">Successfully logged in</h2>';
-                echo '<div class="text-center"> <a class="btn btn-primary" href="/statstask/main.html" role="button">Back to main page</a> </div>';
+                echo '<div class="text-center"> <a class="btn btn-primary" href="/statstask/index.html" role="button">Back to main page</a> </div>';
             } elseif ($num_rows == 0) {
                 echo '<h2 class="text-center">Wrong credentials</h2>';
             } else {

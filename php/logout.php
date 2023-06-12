@@ -50,6 +50,10 @@
             unset($_COOKIE['userPrivilege']);
             setcookie('userPrivilege', null, -1, '/');
         }
+        if (isset($_COOKIE['userId'])) {
+            unset($_COOKIE['userId']);
+            setcookie('userId', null, -1, '/');
+        }
         echo '<h2 class="text-center">Successfully logged out</h2>';
         ?>
     </div>
