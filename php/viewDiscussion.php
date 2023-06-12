@@ -82,9 +82,12 @@
 
                             // Check if the user is the one who made the discussion
                             $loggedInUserId = $_COOKIE['userId']; // Assuming the login token sets this cookie
+                            $userPrivilege = $_COOKIE['userPrivilege'];
 
-                            if ($loggedInUserId && $userId == $loggedInUserId) {
+                            if (($loggedInUserId && $userId == $loggedInUserId) || ($userPrivilege == 'admin'))  {
                                 echo '<button id="editContentButton" class="btn btn-primary mt-3">Edit Content</button>';
+                                echo '<button id="deleteDiscussionButton" style="margin-left:20px" class="btn btn-warning mt-3">Delete Discussion</button>
+                                ';
                             }
                         } else {
                             echo '<h2 class="text-center mt-4">Discussion not found</h2>';
@@ -125,13 +128,15 @@
 
                                     // Check if the comment belongs to the currently logged-in user
                                     $loggedInUserId = $_COOKIE['userId']; // Assuming the login token sets this cookie
-
-                                    if ($loggedInUserId && $commentUserId == $loggedInUserId) {
+                                    $userPrivilege = $_COOKIE['userPrivilege'];
+                                    
+                                    if (($loggedInUserId && $commentUserId == $loggedInUserId) || ($userPrivilege == 'admin')) {
                                         echo '<div class="text-end">';
                                         echo '<button class="btn btn-danger btn-sm delete-comment-btn" data-comment-id="' . $comment['id'] . '">Delete Comment</button>';
                                         echo '</div>';
-                                    }
+                                    }                                    
 
+                                    echo '<hr>';
 
                                     echo '</div>';
                                 }
@@ -275,6 +280,35 @@
                     xhr.send();
                 }
             </script>
+
+            <script>
+                const deleteDiscussionButton = document.getElementById('deleteDiscussionButton');
+
+                deleteDiscussionButton.addEventListener('click', () => {
+                    confirmDeleteDiscussion();
+                });
+
+                function confirmDeleteDiscussion() {
+                    const confirmation = confirm('Are you sure you want to delete this discussion?');
+                    if (confirmation) {
+                        deleteDiscussion();
+                    }
+                }
+
+                function deleteDiscussion() {
+                    // Make AJAX request to delete the discussion from the database
+                    const xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function() {
+                        if (xhr.readyState === 4 && xhr.status === 200) {
+                            // Redirect to the forum page after successful deletion
+                            window.location.href = '/statstask/php/forum.php';
+                        }
+                    };
+                    xhr.open('GET', `deleteDiscussion.php?id=<?php echo $discussionId; ?>`);
+                    xhr.send();
+                }
+            </script>
+
             <script src="/statstask/scripts/cookieCheckNotLoggedIn.js" type="text/javascript"></script>
             <script src="/statstask/scripts/headerCheck.js" type="text/javascript"></script>
 </body>
