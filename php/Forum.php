@@ -134,11 +134,11 @@
                                 // Fetch username and discussion type name from related tables
                                 $userResult = mysqli_query($con, "SELECT username FROM credentials WHERE id = $userId");
                                 $userRow = mysqli_fetch_assoc($userResult);
-                                $username = $userRow ? $userRow['username'] : 'Deleted User';
+                                $username = $userRow ? $userRow['username'] : '(Deleted User)';
 
                                 $typeResult = mysqli_query($con, "SELECT name FROM discussion_types WHERE id = $type");
                                 $typeRow = mysqli_fetch_assoc($typeResult);
-                                $typeName = $typeRow ? $typeRow['name'] : 'Deleted Type';
+                                $typeName = $typeRow ? $typeRow['name'] : '(Deleted Type)';
 
                                 // Output a row in the table for each discussion
                                 echo "<tr>";

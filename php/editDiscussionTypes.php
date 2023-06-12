@@ -82,14 +82,25 @@
         }
 
         // Handle discussion type deletion
-        if (isset($_GET['deleteTypeId'])) {
-          $typeId = $_GET['deleteTypeId'];
+        if (isset($_POST['deleteTypeId'])) {
+          $typeId = $_POST['deleteTypeId'];
           $query = "DELETE FROM discussion_types WHERE id = $typeId";
-          if (mysqli_query($con, $query)) {
-            echo '<tr><td colspan="2">Discussion type deleted successfully.</td></tr>';
-          } else {
-            echo '<tr><td colspan="2">Failed to delete discussion type.</td></tr>';
-          }
+          mysqli_query($con, $query);
+        }
+
+        // Handle discussion type update
+        if (isset($_POST['updateTypeId']) && isset($_POST['updateTypeName'])) {
+          $typeId = $_POST['updateTypeId'];
+          $typeName = $_POST['updateTypeName'];
+          $query = "UPDATE discussion_types SET name = '$typeName' WHERE id = $typeId";
+          mysqli_query($con, $query);
+        }
+
+        // Handle new discussion type creation
+        if (isset($_POST['typeName'])) {
+          $typeName = $_POST['typeName'];
+          $query = "INSERT INTO discussion_types (name) VALUES ('$typeName')";
+          mysqli_query($con, $query);
         }
 
         // Retrieve all discussion types from the database
@@ -102,8 +113,13 @@
           $typeName = $row['name'];
 
           echo "<tr>";
-          echo "<td>$typeName</td>";
-          echo "<td><button onclick=\"editType($typeId, '$typeName')\">Edit</button> <button onclick=\"confirmDelete($typeId, '$typeName')\">Delete</button></td>";
+          if (isset($_GET['typeId']) && $_GET['typeId'] == $typeId) {
+            echo "<td><input type='text' id='editTypeName' value='$typeName'></td>";
+            echo "<td><button onclick=\"saveType($typeId)\">Save</button></td>";
+          } else {
+            echo "<td>$typeName</td>";
+            echo "<td><button onclick=\"editType($typeId, '$typeName')\">Edit</button> <button onclick=\"confirmDelete($typeId, '$typeName')\">Delete</button></td>";
+          }
           echo "</tr>";
         }
 
@@ -112,6 +128,8 @@
         ?>
       </tbody>
     </table>
+
+    <button onclick="createNewType()">Create New Discussion Type</button>
   </div>
 
   <script src="/statstask/scripts/headerCheck.js" type="text/javascript"></script>
@@ -121,14 +139,78 @@
       window.location.href = `editDiscussionTypes.php?typeId=${typeId}&typeName=${encodeURIComponent(typeName)}`;
     }
 
+    function saveType(typeId) {
+      const editTypeName = document.getElementById('editTypeName').value;
+      // Create a form dynamically
+      const form = document.createElement('form');
+      form.method = 'post';
+      form.action = 'editDiscussionTypes.php';
+
+      // Create hidden input fields to pass the updated type ID and name
+      const typeIdInput = document.createElement('input');
+      typeIdInput.type = 'hidden';
+      typeIdInput.name = 'updateTypeId';
+      typeIdInput.value = typeId;
+
+      const typeNameInput = document.createElement('input');
+      typeNameInput.type = 'hidden';
+      typeNameInput.name = 'updateTypeName';
+      typeNameInput.value = editTypeName;
+
+      // Append the input fields to the form
+      form.appendChild(typeIdInput);
+      form.appendChild(typeNameInput);
+
+      // Append the form to the document and submit it
+      document.body.appendChild(form);
+      form.submit();
+    }
+
     function confirmDelete(typeId, typeName) {
       if (confirm(`Are you sure you want to delete the discussion type '${typeName}'?`)) {
-        // Redirect to the delete handler within the same page, passing the type ID
-        window.location.href = `editDiscussionTypes.php?deleteTypeId=${typeId}`;
+        // Create a form dynamically
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = 'editDiscussionTypes.php';
+
+        // Create a hidden input field to pass the type ID for deletion
+        const typeIdInput = document.createElement('input');
+        typeIdInput.type = 'hidden';
+        typeIdInput.name = 'deleteTypeId';
+        typeIdInput.value = typeId;
+
+        // Append the input field to the form
+        form.appendChild(typeIdInput);
+
+        // Append the form to the document and submit it
+        document.body.appendChild(form);
+        form.submit();
+      }
+    }
+
+    function createNewType() {
+      const newTypeName = prompt("Enter the name for the new discussion type:");
+      if (newTypeName) {
+        // Create a form dynamically
+        const form = document.createElement('form');
+        form.method = 'post';
+        form.action = 'editDiscussionTypes.php';
+
+        // Create a hidden input field to pass the new discussion type name
+        const typeNameInput = document.createElement('input');
+        typeNameInput.type = 'hidden';
+        typeNameInput.name = 'typeName';
+        typeNameInput.value = newTypeName;
+
+        // Append the input field to the form
+        form.appendChild(typeNameInput);
+
+        // Append the form to the document and submit it
+        document.body.appendChild(form);
+        form.submit();
       }
     }
   </script>
-
 </body>
 
 </html>
