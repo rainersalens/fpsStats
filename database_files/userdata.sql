@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 13, 2023 at 02:19 PM
+-- Generation Time: Jun 13, 2023 at 04:40 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -151,7 +151,9 @@ CREATE TABLE `third_party_user_accounts` (
 --
 
 INSERT INTO `third_party_user_accounts` (`id`, `username`, `user_id`, `game_id`) VALUES
-(5, 'RainIsTakenBruh', 1, 1);
+(5, 'RainIsTakenBruh', 1, 1),
+(6, 'I am paid actor', 1, 2),
+(12, 'OwOtist', 3, 1);
 
 -- --------------------------------------------------------
 
@@ -164,15 +166,19 @@ CREATE TABLE `user_ranks_apex` (
   `third_party_user_account_id` int(11) NOT NULL,
   `rank` varchar(50) NOT NULL,
   `rank_division` varchar(50) NOT NULL,
-  `rank_image_link` varchar(50) NOT NULL
+  `rank_image_link` varchar(200) NOT NULL,
+  `fetched_on` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `user_ranks_apex`
 --
 
-INSERT INTO `user_ranks_apex` (`id`, `third_party_user_account_id`, `rank`, `rank_division`, `rank_image_link`) VALUES
-(1, 1, 'Rookie', '4', 'https://api.mozambiquehe.re/assets/ranks/rookie4.p');
+INSERT INTO `user_ranks_apex` (`id`, `third_party_user_account_id`, `rank`, `rank_division`, `rank_image_link`, `fetched_on`) VALUES
+(12, 5, 'Rookie', '4', 'https://api.mozambiquehe.re/assets/ranks/rookie4.png', '2023-06-13 17:38:39'),
+(13, 5, 'Rookie', '4', 'https://api.mozambiquehe.re/assets/ranks/rookie4.png', '2023-06-13 17:39:26'),
+(14, 12, 'Master', '1', 'https://api.mozambiquehe.re/assets/ranks/master1.png', '2023-06-13 17:39:39'),
+(15, 12, 'Master', '1', 'https://api.mozambiquehe.re/assets/ranks/master1.png', '2023-06-13 17:39:42');
 
 --
 -- Indexes for dumped tables
@@ -263,13 +269,13 @@ ALTER TABLE `games`
 -- AUTO_INCREMENT for table `third_party_user_accounts`
 --
 ALTER TABLE `third_party_user_accounts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT for table `user_ranks_apex`
 --
 ALTER TABLE `user_ranks_apex`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables

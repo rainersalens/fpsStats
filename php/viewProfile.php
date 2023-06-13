@@ -48,7 +48,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                        <?php
+                    <?php
                         // Get the user ID from the URL parameter
                         $userId = $_GET['id'];
 
@@ -64,10 +64,29 @@
 
                             echo '<h1 class="card-title">' . $username . '</h1>';
                             echo '<p class="card-text">Email: ' . $email . '</p>';
-                            echo '<p class="card-text">Created On: ' . $createdOn . '</p>';
+                            echo '<p class="card-text">Joined on: ' . $createdOn . '</p>';
+
+                            // Fetch rank data from user_ranks_apex
+                            $rankResult = mysqli_query($con, "SELECT * FROM user_ranks_apex WHERE third_party_user_account_id IN (SELECT id FROM third_party_user_accounts WHERE user_id = $userId) ORDER BY id DESC LIMIT 1");
+                            if ($rankResult && mysqli_num_rows($rankResult) > 0) {
+                                echo "<hr>";
+                                echo "<h3>Rank Data:</h3>";
+                                $rank = mysqli_fetch_assoc($rankResult);
+                                $rankName = $rank['rank'];
+                                $rankDivision = $rank['rank_division'];
+                                $rankImageLink = $rank['rank_image_link'];
+
+                                echo "<p>Rank: $rankName</p>";
+                                echo "<p>Division: $rankDivision</p>";
+                                echo "<img style='width: 150px; height: 150px' src='$rankImageLink' alt='Rank Image'>";
+                            } else {
+                                echo "<p>No rank data available.</p>";
+                            }
                         } else {
                             echo '<p>User not found.</p>';
                         }
+
+                        // Fetch third-party user accounts
                         $userAccounts = mysqli_query($con, "SELECT * FROM third_party_user_accounts WHERE user_id = $userId");
                         if ($userAccounts && mysqli_num_rows($userAccounts) > 0) {
                             echo "<hr>";
@@ -77,24 +96,8 @@
                                 $gameId = $account['game_id'];
                                 $gameResult = mysqli_query($con, "SELECT name FROM games WHERE id = $gameId");
                                 $game = mysqli_fetch_assoc($gameResult)['name'];
-                                echo "<li>$game: $username</li>";
-                            }
-                            echo "</ul>";
-                        }
-
-                        // Check if the user has rank data in user_ranks_apex
-                        $userRanksResult = mysqli_query($con, "SELECT * FROM user_ranks_apex WHERE third_party_user_account_id IN (SELECT id FROM third_party_user_accounts WHERE user_id = $userId)");
-                        if ($userRanksResult && mysqli_num_rows($userRanksResult) > 0) {
-                            echo "<hr>";
-                            echo "<h3>Rank Data:</h3>";
-                            echo "<ul>";
-                            while ($rank = mysqli_fetch_assoc($userRanksResult)) {
-                                $rankName = $rank['rank'];
-                                $rankDivision = $rank['rank_division'];
-                                $rankImageLink = $rank['rank_image_link'];
-                                echo "<li>Rank: $rankName</li>";
-                                echo "<li>Division: $rankDivision</li>";
-                                echo "<li><img src='$rankImageLink' alt='Rank Image'></li>";
+                                $accountUsername = $account['username'];
+                                echo "<li>$game: $accountUsername</li>";
                             }
                             echo "</ul>";
                         }

@@ -43,11 +43,34 @@ if (isset($response['Error'])) {
     $userAccounts = mysqli_query($con, "SELECT * FROM third_party_user_accounts WHERE username = '$username' AND game_id = (SELECT id FROM games WHERE name = 'Apex Legends') LIMIT 1");
 
     if ($userAccounts && mysqli_num_rows($userAccounts) > 0) {
-        // Entry found, create an entry in the user_ranks_apex table
+        // Entry found, update the existing entry in the user_ranks_apex table
         $accountData = mysqli_fetch_assoc($userAccounts);
         $thirdPartyAccountId = $accountData['id'];
 
+        // Check if the username value matches the generated stats username
+        if ($accountData['username'] == $playerName) {
+            // Update values in the user_ranks_apex table
+            $sql = "UPDATE user_ranks_apex SET rank = '$rankName', rank_division = '$rankDiv', rank_image_link = '$rankImg' WHERE third_party_user_account_id = '$thirdPartyAccountId'";
+            mysqli_query($con, $sql);
+        } else {
+            // Insert a new entry in the user_ranks_apex table
+            $userId = $_COOKIE['userId'];
+            $sql = "INSERT INTO user_ranks_apex (third_party_user_account_id, rank, rank_division, rank_image_link) VALUES ('$thirdPartyAccountId', '$rankName', '$rankDiv', '$rankImg') ON DUPLICATE KEY UPDATE rank = '$rankName', rank_division = '$rankDiv', rank_image_link = '$rankImg'";
+            mysqli_query($con, $sql);
+        }
+    } else {
+        // Entry not found, create a new entry in the third_party_user_accounts and user_ranks_apex tables
+        $gameId = mysqli_fetch_assoc(mysqli_query($con, "SELECT id FROM games WHERE name = 'Apex Legends'"))['id'];
+
+        // Insert values into the third_party_user_accounts table
+        $sql = "INSERT INTO third_party_user_accounts (game_id, username) VALUES ('$gameId', '$playerName')";
+        mysqli_query($con, $sql);
+
+        // Get the inserted third_party_user_account_id
+        $thirdPartyAccountId = mysqli_insert_id($con);
+
         // Insert values into the user_ranks_apex table
+        $userId = $_COOKIE['userId'];
         $sql = "INSERT INTO user_ranks_apex (third_party_user_account_id, rank, rank_division, rank_image_link) VALUES ('$thirdPartyAccountId', '$rankName', '$rankDiv', '$rankImg')";
         mysqli_query($con, $sql);
     }
@@ -103,7 +126,7 @@ function getBanReasonText($banReason)
                     <a href="/statstask/register.html" id="registerButton">
                         <button type="button" class="btn btn-warning">Sign-up</button>
                     </a>
-                    <a href="php/logout.php" id="logoutButton">
+                    <a href="/statstask/php/logout.php" id="logoutButton">
                         <button type="button" class="btn btn-outline-light me-2">Log out</button>
                     </a>
                     <a href="/statstask/edit.html" id="editButton">

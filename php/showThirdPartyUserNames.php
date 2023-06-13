@@ -20,10 +20,14 @@ while ($row = mysqli_fetch_assoc($result)) {
     $games[] = $row;
 }
 
-// Fetch the in-game nicknames for each game and user
+// Fetch the in-game nicknames for the logged-in user
+$userId = $_COOKIE['userId']; // Assuming you have a cookie named 'userId' that stores the logged-in user's ID
+
 $query = "SELECT tpu.id, tpu.username, tpu.user_id, tpu.game_id, g.name AS game_name
           FROM third_party_user_accounts AS tpu
-          INNER JOIN games AS g ON tpu.game_id = g.id";
+          INNER JOIN games AS g ON tpu.game_id = g.id
+          WHERE tpu.user_id = '$userId'";
+
 $result = mysqli_query($con, $query);
 
 if (!$result) {
