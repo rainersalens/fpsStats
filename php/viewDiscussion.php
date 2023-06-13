@@ -77,7 +77,13 @@
 
                             echo '<h1 class="card-title">' . $discussion['title'] . '</h1>';
                             echo '<p class="mb-2">Type: <span id="discussionType">' . ($type ? $type['name'] : 'Deleted Type') . '</span></p>';
-                            echo '<p style="margin-top:40px" class="mb-2">Submitted by: ' . ($user ? $user['username'] : 'Deleted User') . '</p>';
+                            echo '<p style="margin-top:40px" class="mb-2">Submitted by: ';
+                            if ($user) {
+                                echo '<a href="/statstask/php/viewProfile.php?id=' . $user['id'] . '">' . $user['username'] . '</a>';
+                            } else {
+                                echo 'Deleted User';
+                            }
+                            echo '</p>';
                             echo '<div class="card-text border p-3">' . $discussion['content'] . '</div>';
 
                             // Check if the user is the one who made the discussion
@@ -125,15 +131,21 @@
 
                                 if ($commentsCount > 0) {
                                     while ($comment = mysqli_fetch_assoc($commentsResult)) {
-                                        $commentId = $comment['id']; // Get the comment ID
+                                        $commentId = $comment['id'];
                                         $commentUserId = $comment['user_id'];
                                         $userResult = mysqli_query($con, "SELECT * FROM credentials WHERE id = $commentUserId");
                                         $user = mysqli_fetch_assoc($userResult);
-
+                                
                                         echo '<div class="mb-3">';
-                                        echo '<p class="fw-bold">' . ($user ? $user['username'] : 'Deleted User') . '</p>';
+                                        echo '<p class="fw-bold">';
+                                        if ($user) {
+                                            echo '<a href="/statstask/php/viewProfile.php?id=' . $user['id'] . '">' . $user['username'] . '</a>';
+                                        } else {
+                                            echo 'Deleted User';
+                                        }
+                                        echo '</p>';
                                         echo '<p>' . $comment['content'] . '</p>';
-
+                                        
                                         // Check if the comment belongs to the currently logged-in user
                                         $loggedInUserId = $_COOKIE['userId']; // Assuming the login token sets this cookie
                                         $userPrivilege = $_COOKIE['userPrivilege'];

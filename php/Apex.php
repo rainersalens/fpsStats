@@ -37,6 +37,20 @@ if (isset($response['Error'])) {
     $rankName = isset($response['global']['rank']['rankName']) ? $response['global']['rank']['rankName'] : '';
     $rankDiv = isset($response['global']['rank']['rankDiv']) ? $response['global']['rank']['rankDiv'] : '';
     $rankImg = isset($response['global']['rank']['rankImg']) ? $response['global']['rank']['rankImg'] : '';
+
+    // Check if the user has a saved entry for Apex in third_party_user_accounts
+    $con = mysqli_connect('localhost', getenv('DB_USER_NAME'), getenv('DB_USER_PASS'), 'userdata');
+    $userAccounts = mysqli_query($con, "SELECT * FROM third_party_user_accounts WHERE username = '$username' AND game_id = (SELECT id FROM games WHERE name = 'Apex Legends') LIMIT 1");
+
+    if ($userAccounts && mysqli_num_rows($userAccounts) > 0) {
+        // Entry found, create an entry in the user_ranks_apex table
+        $accountData = mysqli_fetch_assoc($userAccounts);
+        $thirdPartyAccountId = $accountData['id'];
+
+        // Insert values into the user_ranks_apex table
+        $sql = "INSERT INTO user_ranks_apex (third_party_user_account_id, rank, rank_division, rank_image_link) VALUES ('$thirdPartyAccountId', '$rankName', '$rankDiv', '$rankImg')";
+        mysqli_query($con, $sql);
+    }
 } else {
     // Handle error when the API response is invalid or missing necessary data
     $errorMessage = "No data found for player on the platform.";
@@ -63,8 +77,7 @@ function getBanReasonText($banReason)
 </head>
 
 <body>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
     <div class="b-example-divider"></div>
 
@@ -150,7 +163,7 @@ function getBanReasonText($banReason)
                         if (isset($areaName['data'])) {
                             foreach ($areaName['data'] as $properties => $propertyValue) {
                                 if ($propertyValue['key'] == 'kills') {
-                                    ?>
+                    ?>
                                     <tr>
                                         <td>
                                             <?= $area ?>
@@ -159,7 +172,7 @@ function getBanReasonText($banReason)
                                             <?= $propertyValue['value'] ?>
                                         </td>
                                     </tr>
-                                <?php
+                    <?php
                                 }
                             }
                         }

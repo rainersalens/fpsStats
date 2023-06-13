@@ -55,6 +55,11 @@
         <h5>Delete your account</h5>
         <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Account</button>
 
+        <div style="margin-top: 40px;">
+            <h1>Edit Nicknames</h1>
+            <div id="nicknamesContainer"></div>
+        </div>
+
         <h5 id="editAccountsTitle" style="margin-top: 40px; display: none;">Edit user accounts (Admin only)</h5>
         <button id="editAccountsButton" type="button" class="btn btn-primary" onclick="window.location.href='/statstask/php/editUsers.php'" style="display: none;">Edit Accounts</button>
     </div>
@@ -68,6 +73,8 @@
         }
 
         const userPrivilege = getCookie("userPrivilege");
+        const userName = getCookie("userName");
+        const userId = getCookie("userId");
 
         if (userPrivilege === "admin") {
             const editAccountsTitle = document.getElementById("editAccountsTitle");
@@ -92,6 +99,119 @@
             return "";
         }
     </script>
+
+<script>
+    function createNicknameInput(gameId, currentNickname) {
+        const inputContainer = document.createElement('div');
+        inputContainer.classList.add('input-group', 'mb-3');
+
+        const nicknameInput = document.createElement('input');
+        nicknameInput.classList.add('form-control');
+        nicknameInput.type = 'text';
+        nicknameInput.value = currentNickname;
+        nicknameInput.disabled = true;
+        inputContainer.appendChild(nicknameInput);
+
+        const buttonContainer = document.createElement('div');
+        buttonContainer.classList.add('input-group-append');
+
+        const editButton = document.createElement('button');
+        editButton.classList.add('btn', 'btn-outline-primary');
+        editButton.type = 'button';
+        editButton.textContent = 'Edit';
+        buttonContainer.appendChild(editButton);
+
+        const saveButton = document.createElement('button');
+        saveButton.classList.add('btn', 'btn-outline-success');
+        saveButton.type = 'button';
+        saveButton.textContent = 'Save';
+        saveButton.style.display = 'none';
+        buttonContainer.appendChild(saveButton);
+
+        inputContainer.appendChild(buttonContainer);
+
+        // Edit button click event
+        editButton.addEventListener('click', function () {
+            nicknameInput.disabled = false;
+            nicknameInput.focus();
+
+            editButton.style.display = 'none';
+            saveButton.style.display = 'inline-block';
+        });
+
+        // Save button click event
+        saveButton.addEventListener('click', function () {
+            nicknameInput.disabled = true;
+
+            editButton.style.display = 'inline-block';
+            saveButton.style.display = 'none';
+
+            // Save the updated nickname
+            const newNickname = nicknameInput.value;
+            saveNickname(gameId, newNickname);
+        });
+
+        return inputContainer;
+    }
+
+    function saveNickname(gameId, newNickname) {
+    // Send an AJAX request to save the updated or new nickname
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                console.log('Nickname saved successfully');
+            } else {
+                console.log('Error saving nickname');
+            }
+        }
+    };
+
+    const data = new FormData();
+    data.append('gameId', gameId);
+    data.append('nickname', newNickname);
+    data.append('userId', userId);
+
+
+    xhr.open('POST', '/statstask/php/saveThirdPartyUserName.php');
+    xhr.send(data);
+}
+
+
+    // Fetch the nicknames from the server
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                const nicknames = JSON.parse(xhr.responseText);
+                const nicknamesContainer = document.getElementById('nicknamesContainer');
+
+                nicknames.forEach(function (nickname) {
+                    const gameId = nickname.game_id;
+                    const gameName = nickname.game_name;
+                    const currentNickname = nickname.nickname;
+
+                    const gameContainer = document.createElement('div');
+                    gameContainer.classList.add('mb-3');
+
+                    const gameTitle = document.createElement('h4');
+                    gameTitle.textContent = gameName;
+                    gameContainer.appendChild(gameTitle);
+
+                    const nicknameInput = createNicknameInput(gameId, currentNickname);
+                    gameContainer.appendChild(nicknameInput);
+
+                    nicknamesContainer.appendChild(gameContainer);
+                });
+            } else {
+                console.log('Error fetching nicknames');
+            }
+        }
+    };
+
+    xhr.open('GET', '/statstask/php/showThirdPartyUserNames.php');
+    xhr.send();
+</script>
 
     <script src="scripts/headerCheck.js" type="text/javascript"></script>
 
