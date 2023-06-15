@@ -48,7 +48,7 @@
             <div class="col-lg-6">
                 <div class="card">
                     <div class="card-body">
-                    <?php
+                        <?php
                         // Get the user ID from the URL parameter
                         $userId = $_GET['id'];
 
@@ -66,21 +66,51 @@
                             echo '<p class="card-text">Email: ' . $email . '</p>';
                             echo '<p class="card-text">Joined on: ' . $createdOn . '</p>';
 
-                            // Fetch rank data from user_ranks_apex
-                            $rankResult = mysqli_query($con, "SELECT * FROM user_ranks_apex WHERE third_party_user_account_id IN (SELECT id FROM third_party_user_accounts WHERE user_id = $userId) ORDER BY id DESC LIMIT 1");
-                            if ($rankResult && mysqli_num_rows($rankResult) > 0) {
-                                echo "<hr>";
-                                echo "<h3>Rank Data:</h3>";
-                                $rank = mysqli_fetch_assoc($rankResult);
-                                $rankName = $rank['rank'];
-                                $rankDivision = $rank['rank_division'];
-                                $rankImageLink = $rank['rank_image_link'];
+                            // Check if user has a row in third_party_user_accounts table
+                            $thirdPartyAccountResult = mysqli_query($con, "SELECT * FROM third_party_user_accounts WHERE user_id = $userId LIMIT 1");
+                            $thirdPartyAccount = mysqli_fetch_assoc($thirdPartyAccountResult);
 
-                                echo "<p>Rank: $rankName</p>";
-                                echo "<p>Division: $rankDivision</p>";
-                                echo "<img style='width: 150px; height: 150px' src='$rankImageLink' alt='Rank Image'>";
+                            if ($thirdPartyAccount) {
+                                $thirdPartyAccountId = $thirdPartyAccount['id'];
+
+                                // Fetch the latest rank data from user_ranks_apex
+                                $latestRankResult = mysqli_query($con, "SELECT * FROM user_ranks_apex WHERE third_party_user_account_id = $thirdPartyAccountId ORDER BY id DESC LIMIT 1");
+                                $latestRank = mysqli_fetch_assoc($latestRankResult);
+
+                                if ($latestRank) {
+                                    $rankName = $latestRank['rank'];
+                                    $rankDivision = $latestRank['rank_division'];
+                                    $rankImageLink = $latestRank['rank_image_link'];
+                                    $rankPoints = $latestRank['ranked_points'];
+
+                                    // Determine the user's position in the forum based on ranked_points
+                                    $userPositionQuery = "SELECT COUNT(*) AS position FROM (
+                                        SELECT DISTINCT t1.third_party_user_account_id
+                                        FROM user_ranks_apex AS t1
+                                        INNER JOIN (
+                                            SELECT MAX(id) AS max_id, third_party_user_account_id
+                                            FROM user_ranks_apex
+                                            GROUP BY third_party_user_account_id
+                                        ) AS t2 ON t1.id = t2.max_id
+                                        WHERE t1.ranked_points > $rankPoints
+                                        AND t1.third_party_user_account_id <> $thirdPartyAccountId
+                                    ) AS subquery";
+
+                                    $userPositionResult = mysqli_query($con, $userPositionQuery);
+                                    $userPosition = mysqli_fetch_assoc($userPositionResult)['position'] + 1;
+
+                                    echo "<hr>";
+                                    echo "<h3>Rank Data:</h3>";
+                                    echo "<p>Place in forum: #$userPosition</p>";
+                                    echo "<p>Rank: $rankName</p>";
+                                    echo "<p>Division: $rankDivision</p>";
+                                    echo "<p>Ranked Points (RP): $rankPoints</p>";
+                                    echo "<img style='width: 150px; height: 150px' src='$rankImageLink' alt='Rank Image'>";
+                                } else {
+                                    echo "<p>No rank data available.</p>";
+                                }
                             } else {
-                                echo "<p>No rank data available.</p>";
+                                echo "<p>No third-party user accounts found.</p>";
                             }
                         } else {
                             echo '<p>User not found.</p>';
@@ -102,6 +132,7 @@
                             echo "</ul>";
                         }
                         ?>
+
                     </div>
                 </div>
             </div>

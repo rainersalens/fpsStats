@@ -50,12 +50,11 @@ if (isset($response['Error'])) {
         // Check if the username value matches the generated stats username
         if ($accountData['username'] == $playerName) {
             // Update values in the user_ranks_apex table
-            $sql = "UPDATE user_ranks_apex SET rank = '$rankName', rank_division = '$rankDiv', rank_image_link = '$rankImg' WHERE third_party_user_account_id = '$thirdPartyAccountId'";
+            $sql = "UPDATE user_ranks_apex SET rank = '$rankName', rank_division = '$rankDiv', rank_image_link = '$rankImg', ranked_points = '$rankScore' WHERE third_party_user_account_id = '$thirdPartyAccountId'";
             mysqli_query($con, $sql);
         } else {
             // Insert a new entry in the user_ranks_apex table
-            $userId = $_COOKIE['userId'];
-            $sql = "INSERT INTO user_ranks_apex (third_party_user_account_id, rank, rank_division, rank_image_link) VALUES ('$thirdPartyAccountId', '$rankName', '$rankDiv', '$rankImg') ON DUPLICATE KEY UPDATE rank = '$rankName', rank_division = '$rankDiv', rank_image_link = '$rankImg'";
+            $sql = "INSERT INTO user_ranks_apex (third_party_user_account_id, rank, rank_division, rank_image_link, ranked_points) VALUES ('$thirdPartyAccountId', '$rankName', '$rankDiv', '$rankImg', '$rankScore') ON DUPLICATE KEY UPDATE rank = '$rankName', rank_division = '$rankDiv', rank_image_link = '$rankImg', ranked_points = '$rankScore'";
             mysqli_query($con, $sql);
         }
     } else {
@@ -70,8 +69,7 @@ if (isset($response['Error'])) {
         $thirdPartyAccountId = mysqli_insert_id($con);
 
         // Insert values into the user_ranks_apex table
-        $userId = $_COOKIE['userId'];
-        $sql = "INSERT INTO user_ranks_apex (third_party_user_account_id, rank, rank_division, rank_image_link) VALUES ('$thirdPartyAccountId', '$rankName', '$rankDiv', '$rankImg')";
+        $sql = "INSERT INTO user_ranks_apex (third_party_user_account_id, rank, rank_division, rank_image_link, ranked_points) VALUES ('$thirdPartyAccountId', '$rankName', '$rankDiv', '$rankImg', '$rankScore')";
         mysqli_query($con, $sql);
     }
 } else {
