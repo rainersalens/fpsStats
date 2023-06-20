@@ -86,15 +86,12 @@
                             echo '</p>';
                             echo '<div class="card-text border p-3">' . $discussion['content'] . '</div>';
 
-                            // Check if the user is the one who made the discussion
+                            // Check if the user is the one who made the discussion or an admin
                             $loggedInUserId = $_COOKIE['userId']; // Assuming the login token sets this cookie
                             $userPrivilege = $_COOKIE['userPrivilege'];
 
-                            if ($loggedInUserId && $userId == $loggedInUserId) {
+                            if ($loggedInUserId && ($userId == $loggedInUserId || $userPrivilege == 'admin')) {
                                 echo '<button id="editContentButton" class="btn btn-primary mt-3">Edit Content</button>';
-                            }
-                            
-                            if ($userPrivilege == 'admin') {
                                 echo '<button id="deleteDiscussionButton" style="margin-left:20px" class="btn btn-warning mt-3">Delete Discussion</button>';
                             }
                         } else {
@@ -135,7 +132,7 @@
                                         $commentUserId = $comment['user_id'];
                                         $userResult = mysqli_query($con, "SELECT * FROM credentials WHERE id = $commentUserId");
                                         $user = mysqli_fetch_assoc($userResult);
-                                
+
                                         echo '<div class="mb-3">';
                                         echo '<p class="fw-bold">';
                                         if ($user) {
@@ -145,7 +142,7 @@
                                         }
                                         echo '</p>';
                                         echo '<p>' . $comment['content'] . '</p>';
-                                        
+
                                         // Check if the comment belongs to the currently logged-in user
                                         $loggedInUserId = $_COOKIE['userId']; // Assuming the login token sets this cookie
                                         $userPrivilege = $_COOKIE['userPrivilege'];

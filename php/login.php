@@ -9,8 +9,7 @@
 </head>
 
 <body>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
     <div class="b-example-divider"></div>
 
@@ -55,40 +54,64 @@
         $username = $_POST['usernlog'];
         $password = $_POST['passlog'];
 
-        $sql = "SELECT * FROM `credentials` WHERE username = '$username' AND password = '$password'";
-
-        $result = mysqli_query($con, $sql);
-
-        $num_rows = mysqli_num_rows($result);
-        try {
+        // Check if any of the fields are empty
+        if (empty($username) || empty($password)) {
+            echo '<h2 class="text-center">Please fill in all the required fields.</h2>';
+            echo '<div class="text-center">
+                    <a href="/statstask/login.html">
+                        <button type="button" class="btn btn-primary">Go back</button>
+                    </a>
+                </div>';
+        } else {
+            $sql = "SELECT * FROM `credentials` WHERE username = '$username' AND password = '$password'";
             $result = mysqli_query($con, $sql);
-            if ($num_rows == 1) {
-                $row = mysqli_fetch_assoc($result);
-                $privilege = $row['privilege'];
-                $userId = $row['id']; // Get the user ID
+            $num_rows = mysqli_num_rows($result);
 
-                // Set the cookie for userId
-                $cookie_name_userId = "userId";
-                $cookie_value_userId = $userId;
-                setcookie($cookie_name_userId, $cookie_value_userId, time() + (86400), "/"); // 24h validity
+            try {
+                $result = mysqli_query($con, $sql);
+                if ($num_rows == 1) {
+                    $row = mysqli_fetch_assoc($result);
+                    $privilege = $row['privilege'];
+                    $userId = $row['id']; // Get the user ID
 
-                $cookie_name = "userName";
-                $cookie_value = $username;
-                setcookie($cookie_name, $cookie_value, time() + (86400), "/"); // 24h validity
+                    // Set the cookie for userId
+                    $cookie_name_userId = "userId";
+                    $cookie_value_userId = $userId;
+                    setcookie($cookie_name_userId, $cookie_value_userId, time() + (86400), "/"); // 24h validity
 
-                $cookie_name_privilege = "userPrivilege";
-                $cookie_value_privilege = $privilege;
-                setcookie($cookie_name_privilege, $cookie_value_privilege, time() + (86400), "/"); // 24h validity
+                    $cookie_name = "userName";
+                    $cookie_value = $username;
+                    setcookie($cookie_name, $cookie_value, time() + (86400), "/"); // 24h validity
 
-                echo '<h2 class="text-center">Successfully logged in</h2>';
-                echo '<div class="text-center"> <a class="btn btn-primary" href="/statstask/index.html" role="button">Back to main page</a> </div>';
-            } elseif ($num_rows == 0) {
-                echo '<h2 class="text-center">Wrong credentials</h2>';
-            } else {
+                    $cookie_name_privilege = "userPrivilege";
+                    $cookie_value_privilege = $privilege;
+                    setcookie($cookie_name_privilege, $cookie_value_privilege, time() + (86400), "/"); // 24h validity
+
+                    echo '<h2 class="text-center">Successfully logged in</h2>';
+                    echo '<div class="text-center"> <a class="btn btn-primary" href="/statstask/index.html" role="button">Back to main page</a> </div>';
+                } elseif ($num_rows == 0) {
+                    echo '<h2 class="text-center">Wrong credentials</h2>';
+                    echo '<div class="text-center">
+                    <a href="/statstask/login.html">
+                        <button type="button" class="btn btn-primary">Go back</button>
+                    </a>
+                    </div>';
+                } else {
+                    echo '<h2 class="text-center">An error occurred.</h2>';
+                    echo '<div class="text-center">
+                    <a href="/statstask/login.html">
+                        <button type="button" class="btn btn-primary">Go back</button>
+                    </a>
+                    </div>';
+                }
+            } catch (exception $e) {
                 echo '<h2 class="text-center">An error occurred.</h2>';
+                echo '<div class="text-center">
+                <a href="/statstask/login.html">
+                    <button type="button" class="btn btn-primary">Go back</button>
+                </a>
+                </div>';
             }
-        } catch (exception $e) {
-            echo '<h2 class="text-center">An error occurred.</h2>';
         }
         ?>
     </div>

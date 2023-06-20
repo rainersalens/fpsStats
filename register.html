@@ -2,52 +2,52 @@
 <html lang="en">
 
 <head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Register</title>
-  <script>
-    if (document.cookie.indexOf('userName') > -1) {
-        window.location = '/statstask/main.html';
-    };
-  </script>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+    <script>
+        if (document.cookie.indexOf('userName') > -1) {
+            window.location = '/statstask/main.html';
+        };
+    </script>
 </head>
 
 <body>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
 
-  <div class="b-example-divider"></div>
+    <div class="b-example-divider"></div>
 
-  <header class="p-3 text-bg-dark">
-    <div class="container">
-      <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-          <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
-            <use xlink:href="#bootstrap" />
-          </svg>
-        </a>
+    <header class="p-3 text-bg-dark">
+        <div class="container">
+            <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+                <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
+                    <svg class="bi me-2" width="40" height="32" role="img" aria-label="Bootstrap">
+                        <use xlink:href="#bootstrap" />
+                    </svg>
+                </a>
 
-        <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="/statstask/index.html" class="nav-link px-2 text-secondary">Home/About</a></li>
-          <li><a href="/statstask/main.html" class="nav-link px-2 text-secondary">Stat tracker</a></li>
-          <li><a href="/statstask/php/forum.php" class="nav-link px-2 text-secondary">Forum</a></li>
-        </ul>
+                <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
+                    <li><a href="/statstask/index.html" class="nav-link px-2 text-secondary">Home/About</a></li>
+                    <li><a href="/statstask/main.html" class="nav-link px-2 text-secondary">Stat tracker</a></li>
+                    <li><a href="/statstask/php/forum.php" class="nav-link px-2 text-secondary">Forum</a></li>
+                </ul>
 
-        <div class="text-end">
-          <a href="/statstask/login.html">
-            <button type="button" class="btn btn-outline-light me-2">Login</button>
-          </a>
-          <a href="/statstask/register.html">
-            <button type="button" class="btn btn-warning">Sign-up</button>
-          </a>
+                <div class="text-end">
+                    <a href="/statstask/login.html">
+                        <button type="button" class="btn btn-outline-light me-2">Login</button>
+                    </a>
+                    <a href="/statstask/register.html">
+                        <button type="button" class="btn btn-warning">Sign-up</button>
+                    </a>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </header>
 
-  <div class="container">
-    <div style="border-style: solid; 
+    <div class="container">
+        <div style="border-style: solid; 
                       border-radius: 40px;
                       position: relative;
                       margin: auto;
@@ -55,33 +55,52 @@
                       width: 50%;
                       background-color: white;
                       ">
-      <h1 style="margin-left: 20px; margin-top: 20px; margin-right: 20px">Register</h1>
-      <form name="registerForm" method="post" action="php/registerCustomer.php">
-        <div class="container">
-          <div class="form-group">
-            <label for="usernlog">Username</label>
-            <input type="text" class="form-control" id="usernreg" name="usernreg" placeholder="Enter username">
-          </div>
-          <div class="form-group">
-            <label for="emailreg">E-Mail</label>
-            <input type="email" class="form-control" id="emailreg" name="emailreg" placeholder="Email">
-          </div>
-          <div class="form-group">
-            <label for="passlog">Password</label>
-            <input type="password" class="form-control" id="passreg" name="passreg" placeholder="Password"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
-            <small id="passwordHelp" class="form-text text-muted">Password must contain at least one number and one
-              uppercase and lowercase letter, and at least 8 or more characters.</small>
-          </div>
-          <div class="form-group">
-            <label for="confpasslog">Confirm Password</label>
-            <input type="password" class="form-control" id="confpassreg" name="confpassreg" placeholder="Confirm Password"
-              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}">
-          </div>
-          <button type="submit" class="btn btn-primary" id="enterBtn" style="margin: 10px;">Submit</button>
+            <h1 style="margin-left: 20px; margin-top: 20px; margin-right: 20px">Register</h1>
+            <form name="registerForm" method="post" action="php/registerCustomer.php" onsubmit="return validateForm()">
+                <div class="container">
+                    <div class="form-group">
+                        <label for="usernlog">Username</label>
+                        <input type="text" class="form-control" id="usernreg" name="usernreg"
+                            placeholder="Enter username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="emailreg">E-Mail</label>
+                        <input type="email" class="form-control" id="emailreg" name="emailreg" placeholder="Email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="passlog">Password</label>
+                        <input type="password" class="form-control" id="passreg" name="passreg" placeholder="Password"
+                            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                        <small id="passwordHelp" class="form-text text-muted">Password must contain at least one number and one
+                            uppercase and lowercase letter, and at least 8 or more characters.</small>
+                    </div>
+                    <div class="form-group">
+                        <label for="confpasslog">Confirm Password</label>
+                        <input type="password" class="form-control" id="confpassreg" name="confpassreg"
+                            placeholder="Confirm Password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" required>
+                        <div id="passwordMismatch" style="display: none; color: red;">Passwords are not matching</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="enterBtn" style="margin: 10px;">Submit</button>
+                </div>
+            </form>
         </div>
-      </form>
     </div>
+
+    <script>
+        function validateForm() {
+            var passreg = document.getElementById("passreg").value;
+            var confpassreg = document.getElementById("confpassreg").value;
+            var passwordMismatch = document.getElementById("passwordMismatch");
+
+            if (passreg !== confpassreg) {
+                passwordMismatch.style.display = "block";
+                return false;
+            }
+
+            passwordMismatch.style.display = "none";
+            return true;
+        }
+    </script>
 </body>
 
 </html>

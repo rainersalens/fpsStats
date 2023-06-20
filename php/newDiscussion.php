@@ -83,6 +83,10 @@
                                 $discussionContent = isset($_POST['discussionContent']) ? $_POST['discussionContent'] : '';
                                 $discussionType = $_POST['discussionType'];
 
+                                // Escape the apostrophes in discussionName and discussionContent
+                                $discussionName = mysqli_real_escape_string($con, $discussionName);
+                                $discussionContent = mysqli_real_escape_string($con, $discussionContent);
+
                                 // Get the user ID from the session or wherever it is stored
                                 $userId = $_COOKIE['userId'];
 
@@ -90,7 +94,7 @@
                                 $pinned = 0; // Assuming initially the discussion is not pinned
 
                                 $sql = "INSERT INTO discussions (title, content, created_at, pinned, user_id, discussion_type) 
-                                        VALUES ('$discussionName', '$discussionContent', '$date', $pinned, $userId, '$discussionType')";
+                VALUES ('$discussionName', '$discussionContent', '$date', $pinned, $userId, '$discussionType')";
 
                                 if (mysqli_query($con, $sql)) {
                                     $discussionId = mysqli_insert_id($con);
